@@ -1,1 +1,12 @@
-/* Your CSS here... */
+p {
+	font-size: 1.5em;
+	background-color: #C6ECFC;
+	text-align: left;
+	padding-right: .5em;
+	margin-left: 30em;
+
+}
+
+span {
+	font-size: .5em;
+}
