@@ -1,1 +1,3 @@
-// Your JavaScript goes here...
+function parse(){
+	var http = new XMLHttpRequest();	
+};
