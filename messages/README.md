@@ -1,6 +1,5 @@
-Identify what aspects of the work have been correctly implemented and what have not.
-Identify anyone with whom you have collaborated or discussed the assignment.
-Say approximately how many hours you have spent completing the assignment.
-Be written in either text format (README.txt) or in Markdown (README.md). No other formats will be accepted.
-For this lab, you must also answer an important question: is it possible to request the data from a different origin (e.g., http://messagehub.herokuapp.com/) or from your local machine (from file:///) from using XMLHttpRequest? Why or why not? Please read the following three articles, in order, to help you answer this question:
+- All aspects of the work have been correctly and implemented. 
+- I went to Yotam's office hours for help on the assignment. 
+- I spent 1 hours completing this assignment.
+- No, it's not possible, because of cross-origin-resource-sharing. This helps proctect user security and prevents cross-site scripting.
 
