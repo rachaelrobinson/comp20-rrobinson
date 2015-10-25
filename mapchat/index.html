@@ -47,7 +47,8 @@
 				// Create a marker
 				marker = new google.maps.Marker({
 					position: me,
-					title: "Here I Am!"
+					title: "Here I Am!",
+					icon: "house.png"
 				});
 				marker.setMap(map);
 					
@@ -59,20 +60,39 @@
 			}
 			function makeRequest(){
 				var post = "login="+myLogin+"&lat="+myLat+"&lng="+myLng+"&message="+encodeURIComponent("HUHYEAHYUH Y'ALL");
+				var infowindow;
+				var infoMessage;
 				request.open("POST", "https://secret-about-box.herokuapp.com/sendLocation", true);
 				request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				request.onreadystatechange = function(){
 					if(request.readyState === 4) {
-						console.log("HERE");
 						var response = request.responseText;
 						var parsedObj = JSON.parse(response);
 						for (var i = 0; i < parsedObj.length; i++) {
 							user = new google.maps.LatLng(parsedObj[i]["lat"],parsedObj[i]["lng"]);
 							if (user != myLogin) {
+								infoMessage = "<p>Message: "+parsedObj[i]["message"]+"</p>";
+								infowindow = new google.maps.InfoWindow({
+    								content: infoMessage
+  								});
 								marker = new google.maps.Marker({
 									position: user,
 									title: parsedObj[i]["login"],
 								});
+
+								google.maps.event.addListener(marker, 'click', (function(marker, i) {
+									return function() {
+										//NOT PRINTING RIGHT MESSAGE
+										console.log(infoMessage);
+										infowindow.setContent(infoMessage);
+										infowindow.open(map, marker);
+									}
+								})(marker, i));
+								// marker.addListener('click', function() {
+    				// 				infoWindow.open(map, marker);
+    				// 				console.log(infoMessage);
+
+  						// 		});
 								marker.setMap(map);
 							}
 						}
