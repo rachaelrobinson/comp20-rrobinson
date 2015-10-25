@@ -63,14 +63,17 @@
 				request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				request.onreadystatechange = function(){
 					if(request.readyState === 4) {
+						console.log("HERE");
 						var response = request.responseText;
 						var parsedObj = JSON.parse(response);
 						for (var i = 0; i < parsedObj.length; i++) {
 							user = new google.maps.LatLng(parsedObj[i]["lat"],parsedObj[i]["lng"]);
+
 							marker = new google.maps.Marker({
-
-
-							})
+								position: user,
+								title: parsedObj[i]["login"],
+							});
+							marker.setMap(map);
 						}
 						//parsed
 						//distance function in for loop of json
