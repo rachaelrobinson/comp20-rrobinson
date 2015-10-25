@@ -13,7 +13,6 @@ function parse(){
 
 function addMessage(JSONdata) {
 	var parsedObj = JSON.parse(JSONdata);
-	console.log("PARSED = ", parsedObj);
 	var messages = document.getElementById('messages');
 	for (var i = 0; i < parsedObj.length; i++) {
 		messages.innerHTML += "<p>" + parsedObj[i]["content"] + " " + "<span>" + parsedObj[i]["username"] + "</span" + "</p>";
