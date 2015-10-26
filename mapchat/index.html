@@ -58,10 +58,32 @@
 					infowindow.open(map, marker);
 				});
 			}
+			//taken from http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript
+			function distanceGeo(lat2, lon2){
+				Number.prototype.toRad = function() {
+   					return this * Math.PI / 180;
+				}
+
+				var lat1 = myLat; 
+				var lon1 = myLng; 
+
+				var R = 6371; // km 
+				var x1 = lat2-lat1;
+				var dLat = x1.toRad();  
+				var x2 = lon2-lon1;
+				var dLon = x2.toRad();  
+				var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+                	Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                	Math.sin(dLon/2) * Math.sin(dLon/2);  
+				var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+				var d = R * c; 
+				return(d);
+			}
 			function makeRequest(){
 				var post = "login="+myLogin+"&lat="+myLat+"&lng="+myLng+"&message="+encodeURIComponent("HUHYEAHYUH Y'ALL");
 				var infowindow;
 				var infoMessage;
+				var distance;
 				request.open("POST", "https://secret-about-box.herokuapp.com/sendLocation", true);
 				request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				request.onreadystatechange = function(){
@@ -70,35 +92,26 @@
 						var parsedObj = JSON.parse(response);
 						for (var i = 0; i < parsedObj.length; i++) {
 							user = new google.maps.LatLng(parsedObj[i]["lat"],parsedObj[i]["lng"]);
-							if (user != myLogin) {
-								infoMessage = "<p>Message: "+parsedObj[i]["message"]+"</p>";
-								infowindow = new google.maps.InfoWindow({
-    								content: infoMessage
-  								});
+							if (parsedObj[i]["login"] != myLogin) {
+
 								marker = new google.maps.Marker({
 									position: user,
 									title: parsedObj[i]["login"],
 								});
-
 								google.maps.event.addListener(marker, 'click', (function(marker, i) {
 									return function() {
-										//NOT PRINTING RIGHT MESSAGE
-										console.log(infoMessage);
+										distance = distanceGeo(parsedObj[i]["lat"], parsedObj[i]["lng"]);
+										infoMessage = "<p>Lat: "+parsedObj[i]["lat"]+"</p><p>Lng: "+parsedObj[i]["lng"]+"</p><p>Distance: "+distance+"</p><p>Message: "+parsedObj[i]["message"]+"</p>";
+										infowindow = new google.maps.InfoWindow({
+    										content: infoMessage
+  										});
 										infowindow.setContent(infoMessage);
 										infowindow.open(map, marker);
 									}
 								})(marker, i));
-								// marker.addListener('click', function() {
-    				// 				infoWindow.open(map, marker);
-    				// 				console.log(infoMessage);
-
-  						// 		});
 								marker.setMap(map);
 							}
 						}
-						//parsed
-						//distance function in for loop of json
-						//how to add multiple markers in a for loop
 					}
 				};	
 				request.send(post);
