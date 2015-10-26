@@ -9,6 +9,7 @@
 			var myLat = 0;
 			var myLng = 0;
 			var parsed;
+			var parsedObj;
 			var myLogin = "BobOwens"
 			var request = new XMLHttpRequest();
 			var me = new google.maps.LatLng(myLat, myLng);
@@ -32,7 +33,6 @@
 						myLat = position.coords.latitude;
 						myLng = position.coords.longitude;
 						makeRequest();
-						renderMap();
 					});
 				}
 				else {
@@ -44,11 +44,31 @@
 				me = new google.maps.LatLng(myLat, myLng);
 				map.panTo(me);
 	
+				for (var i = 0; i < parsedObj.length; i++) {
+					if (parsedObj[i]["login"] != myLogin) {
+						user = new google.maps.LatLng(parsedObj[i]["lat"],parsedObj[i]["lng"]);
+						distance = distanceGeo(parsedObj[i]["lat"], parsedObj[i]["lng"]);
+						infoMessage = "<p>Login: "+parsedObj[i]["login"]+"</p>"+
+									  "<p>Distance: "+distance+"</p>"+
+									  "<p>Message: "+parsedObj[i]["message"]+"</p>";
+						marker = new google.maps.Marker({
+							position: user,
+							title: infoMessage,
+						});
+						google.maps.event.addListener(marker, 'click', (function(marker, i) {
+							return function() {
+								infowindow.setContent(marker.title);
+								infowindow.open(map, marker);
+							}
+						})(marker, i));
+						marker.setMap(map);
+					}
+				}				
 				// Create a marker
 				marker = new google.maps.Marker({
 					position: me,
-					title: "Here I Am!",
-					icon: "house.png"
+					icon: "house.png",
+					title: "HUHYEAHYUH"
 				});
 				marker.setMap(map);
 					
@@ -81,37 +101,16 @@
 			}
 			function makeRequest(){
 				var post = "login="+myLogin+"&lat="+myLat+"&lng="+myLng+"&message="+encodeURIComponent("HUHYEAHYUH Y'ALL");
-				var infowindow;
+				var infowindow = new google.maps.InfoWindow;
 				var infoMessage;
 				var distance;
 				request.open("POST", "https://secret-about-box.herokuapp.com/sendLocation", true);
 				request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				request.onreadystatechange = function(){
-					if(request.readyState === 4) {
+					if(request.readyState === 4 && request.status === 200) {
 						var response = request.responseText;
-						var parsedObj = JSON.parse(response);
-						for (var i = 0; i < parsedObj.length; i++) {
-							user = new google.maps.LatLng(parsedObj[i]["lat"],parsedObj[i]["lng"]);
-							if (parsedObj[i]["login"] != myLogin) {
-
-								marker = new google.maps.Marker({
-									position: user,
-									title: parsedObj[i]["login"],
-								});
-								google.maps.event.addListener(marker, 'click', (function(marker, i) {
-									return function() {
-										distance = distanceGeo(parsedObj[i]["lat"], parsedObj[i]["lng"]);
-										infoMessage = "<p>Lat: "+parsedObj[i]["lat"]+"</p><p>Lng: "+parsedObj[i]["lng"]+"</p><p>Distance: "+distance+"</p><p>Message: "+parsedObj[i]["message"]+"</p>";
-										infowindow = new google.maps.InfoWindow({
-    										content: infoMessage
-  										});
-										infowindow.setContent(infoMessage);
-										infowindow.open(map, marker);
-									}
-								})(marker, i));
-								marker.setMap(map);
-							}
-						}
+						parsedObj = JSON.parse(response);
+						renderMap();
 					}
 				};	
 				request.send(post);
