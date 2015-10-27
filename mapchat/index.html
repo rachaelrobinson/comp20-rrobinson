@@ -49,7 +49,7 @@
 						user = new google.maps.LatLng(parsedObj[i]["lat"],parsedObj[i]["lng"]);
 						distance = distanceGeo(parsedObj[i]["lat"], parsedObj[i]["lng"]);
 						infoMessage = "<p>Login: "+parsedObj[i]["login"]+"</p>"+
-									  "<p>Distance: "+distance+"</p>"+
+									  "<p>Distance: "+distance+" miles</p>"+
 									  "<p>Message: "+parsedObj[i]["message"]+"</p>";
 						marker = new google.maps.Marker({
 							position: user,
@@ -97,6 +97,7 @@
                 	Math.sin(dLon/2) * Math.sin(dLon/2);  
 				var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 				var d = R * c; 
+				d /= 1.60934;
 				return(d);
 			}
 			function makeRequest(){
