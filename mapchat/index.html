@@ -49,7 +49,6 @@
 						user = new google.maps.LatLng(parsedObj[i]["lat"],parsedObj[i]["lng"]);
 						distance = distanceGeo(parsedObj[i]["lat"], parsedObj[i]["lng"]);
 						infoMessage = "<p>Login: "+parsedObj[i]["login"]+"</p>"+
-									  "<p>Distance: "+distance+" miles</p>"+
 									  "<p>Message: "+parsedObj[i]["message"]+"</p>";
 						marker = new google.maps.Marker({
 							position: user,
