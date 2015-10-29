@@ -41,15 +41,13 @@
 			}
 			function renderMap()
 			{
-				me = new google.maps.LatLng(myLat, myLng);
-				map.panTo(me);
 	
 				for (var i = 0; i < parsedObj.length; i++) {
-					if (parsedObj[i]["login"] != myLogin) {
 						user = new google.maps.LatLng(parsedObj[i]["lat"],parsedObj[i]["lng"]);
 						distance = distanceGeo(parsedObj[i]["lat"], parsedObj[i]["lng"]);
 						infoMessage = "<p>Login: "+parsedObj[i]["login"]+"</p>"+
-									  "<p>Message: "+parsedObj[i]["message"]+"</p>";
+									  "<p>Message: "+parsedObj[i]["message"]+"</p>"+
+									  "<p>Distance: "+distance+" miles</p>";
 						marker = new google.maps.Marker({
 							position: user,
 							title: infoMessage,
@@ -61,8 +59,9 @@
 							}
 						})(marker, i));
 						marker.setMap(map);
-					}
-				}				
+				}
+				me = new google.maps.LatLng(myLat, myLng);
+				map.panTo(me);				
 				// Create a marker
 				marker = new google.maps.Marker({
 					position: me,
@@ -76,6 +75,7 @@
 					infowindow.setContent(marker.title);
 					infowindow.open(map, marker);
 				});
+
 			}
 			//taken from http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript
 			function distanceGeo(lat2, lon2){
