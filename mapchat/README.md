@@ -1,3 +1,3 @@
-- Everything is implemented correctly except that still calculating distance in miles.
+- Everything is implemented correctly.
 - I talked with David McConnell about the project and used examples from stackoverflow and on the tufts dev github 20 example pages.
 - Spent about 4 hours completing the assignment.
