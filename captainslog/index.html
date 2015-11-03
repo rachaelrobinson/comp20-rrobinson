@@ -9,15 +9,6 @@
 		var d_names = ["Sun","Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 		var m_names = ["January", "February", "March", "April", "May", "June", "July", 
 						"August", "September", "October", "November", "December"];
-		var date;
-		var day_week;
-		var day_month;
-		var month;
-		var time;
-		var year;
-		var hour;
-		var minute;
-		var second;
 
 		var temp_count;
 		var print_message;
@@ -26,48 +17,51 @@
 			temp_count = localStorage.getItem('counter')
 			if (temp_count != undefined){
 				for (var i = 0; i < temp_count; i++){
-					//console.log("PRINTING");
 					print_message = localStorage.getItem(i);
-					console.log(print_message);
 					$("#log").prepend(print_message);
 				}
 			}
+			$(document).keypress(function(e) {
+			var date;
+			var day_week;
+			var day_month;
+			var month;
+			var time;
+			var year;
+			var hour;
+			var minute;
+			var second;
+			var print_date;
+			if(e.which == 13) {
+				temp_count = localStorage.getItem('counter');
+				if (temp_count == undefined){
+					temp_count = 0;
+					localStorage.setItem('counter', temp_count);
+				}
+				input = $("#msg").val();
+    			date = new Date($.now());
+    			month = date.getMonth();
+    			day_week = date.getDay();
+    			day_month = date.getDate();
+    			year = date.getFullYear();
+    			hour = date.getHours();
+    			minute = date.getMinutes();
+    			second = date.getSeconds();
+
+    			print_date = d_names[day_week]+" "+m_names[month]+" "+day_month+" "
+    						 +hour+":"+minute+":"+second+" "+year+" - ";
+    			print_message = "<p>"+print_date+input+"</p>";
+    			localStorage.setItem(temp_count, print_message);
+    			temp_count++;
+    			localStorage.setItem('counter', temp_count);
+    			$("#log").prepend(print_message);
+
+    			$("#msg").val('');
+    		}
+		});
 			
 		});
-		//.change look up 
-// 		<input/><output/>
-// $("input").change( function() {
-//     $("output").val( $("input").val() );
-// })
-			$(document).keypress(function(e) {
-				var print_date;
-    			if(e.which == 13) {
-    				temp_count = localStorage.getItem('counter');
-    				if (temp_count == undefined){
-    					temp_count = 0;
-    					localStorage.setItem('counter', temp_count);
-    				}
-    				input = $("#msg").val();
-
-        			date = new Date($.now());
-        			month = date.getMonth();
-        			day_week = date.getDay();
-        			day_month = date.getDate();
-        			year = date.getFullYear();
-        			hour = date.getHours();
-        			minute = date.getMinutes();
-        			second = date.getSeconds();
-
-        			print_date = d_names[day_week]+" "+m_names[month]+" "+day_month+" "
-        						 +hour+":"+minute+":"+second+" "+year+" - ";
-        			print_message = "<p>"+print_date+input+"</p>";
-        			localStorage.setItem(temp_count, print_message);
-        			temp_count++;
-        			localStorage.setItem('counter', temp_count);
-        			$("document").ready();
-        			$("#msg").val('');
-        		}
-		});
+	
 	</script>
 </head>
 
