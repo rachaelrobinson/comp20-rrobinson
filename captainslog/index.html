@@ -6,9 +6,19 @@
 	<title>Captain's Log</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script>
+		var d_names = ["Sun","Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+		var m_names = ["January", "February", "March", "April", "May", "June", "July", 
+						"August", "September", "October", "November", "December"];
 		var date;
+		var day_week;
+		var day_month;
 		var month;
 		var time;
+		var year;
+		var hour;
+		var minute;
+		var second;
+
 		var temp_count;
 		var print_message;
 		var input;
@@ -16,8 +26,9 @@
 			temp_count = localStorage.getItem('counter')
 			if (temp_count != undefined){
 				for (var i = 0; i < temp_count; i++){
-					console.log("PRINTING");
-					print_message = localStorage.getItem('i');
+					//console.log("PRINTING");
+					print_message = localStorage.getItem(i);
+					console.log(print_message);
 					$("#log").prepend(print_message);
 				}
 			}
@@ -29,6 +40,7 @@
 //     $("output").val( $("input").val() );
 // })
 			$(document).keypress(function(e) {
+				var print_date;
     			if(e.which == 13) {
     				temp_count = localStorage.getItem('counter');
     				if (temp_count == undefined){
@@ -36,17 +48,26 @@
     					localStorage.setItem('counter', temp_count);
     				}
     				input = $("#msg").val();
-        			// date = new Date($.now());
-        			print_message = input;
-        			console.log(print_message);
-        			localStorage.setItem('temp_count', print_message);
+
+        			date = new Date($.now());
+        			month = date.getMonth();
+        			day_week = date.getDay();
+        			day_month = date.getDate();
+        			year = date.getFullYear();
+        			hour = date.getHours();
+        			minute = date.getMinutes();
+        			second = date.getSeconds();
+
+        			print_date = d_names[day_week]+" "+m_names[month]+" "+day_month+" "
+        						 +hour+":"+minute+":"+second+" "+year+" - ";
+        			print_message = "<p>"+print_date+input+"</p>";
+        			localStorage.setItem(temp_count, print_message);
         			temp_count++;
         			localStorage.setItem('counter', temp_count);
         			$("document").ready();
         			$("#msg").val('');
         		}
 		});
-	  // Your work will be done here...
 	</script>
 </head>
 
