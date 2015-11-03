@@ -6,8 +6,45 @@
 	<title>Captain's Log</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script>
-			$("document").ready(function() {
-			$("#log").prepend("<p>Know when to hold em...</p>");
+		var date;
+		var month;
+		var time;
+		var temp_count;
+		var print_message;
+		var input;
+		$("document").ready(function() {
+			temp_count = localStorage.getItem('counter')
+			if (temp_count != undefined){
+				for (var i = 0; i < temp_count; i++){
+					console.log("PRINTING");
+					print_message = localStorage.getItem('i');
+					$("#log").prepend(print_message);
+				}
+			}
+			
+		});
+		//.change look up 
+// 		<input/><output/>
+// $("input").change( function() {
+//     $("output").val( $("input").val() );
+// })
+			$(document).keypress(function(e) {
+    			if(e.which == 13) {
+    				temp_count = localStorage.getItem('counter');
+    				if (temp_count == undefined){
+    					temp_count = 0;
+    					localStorage.setItem('counter', temp_count);
+    				}
+    				input = $("#msg").val();
+        			// date = new Date($.now());
+        			print_message = input;
+        			console.log(print_message);
+        			localStorage.setItem('temp_count', print_message);
+        			temp_count++;
+        			localStorage.setItem('counter', temp_count);
+        			$("document").ready();
+        			$("#msg").val('');
+        		}
 		});
 	  // Your work will be done here...
 	</script>
