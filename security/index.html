@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ScoreCenter Security Report</title>
+</head>
+<body>
+<h1>Security and Privacy Assessment of Client-Side and Server-Side</h1>
+
+<p>Inspected by Rachael Robinson on Dec. 7, 2015</p>
+
+<h2>Introduction</h2>
+
+<p>This assessment tests the security and privacy of the <a href="http://lit-brushlands-5923.herokuapp.com/">Assignment 3</a> web application developed by Cecily Lo for Comp20 assignment 2 and 3. According to her client, for Assignment 3, Cecily was instructed to "build a web application that maintains location check-ins (login, latitude, longitude, message) for a long period of time". Furthermore, she was her client does "mention a thing about security or error handling in the requirements. Authentication to this web application is not required" although a list of valid users is given and checked. Thus, this assesment looks into insecurities such as cross site scripting, invalid parameters, as well as invalid data entries (or data entries with missing fields</p>
+
+<h2>Methodology</h2>
+
+<p>Initially, testing was conducted in a "black-box" fashion which is similar to how an attacker would attack the website. By simply using curl, I found multiple vulnuerabilities that I then verified by looking at the code. When looking through the code, I found a few more insecurities that would make this web application vulnerable to malicious attacks.</p>
+
+<h2>Abstract of Findings</h2>
+
+<p>Never ever trust user input. The vulnerabilities of this application all could be fixed by having the developer chant this mantra to themselves as they write their code. By simply accepting external input without extensively checking it, the developer creates a web applicaiton that is extremely vulnerable to malicious attacks. The web application allows for cross site scripting where input is not handled correctly. Also, there is no limit on the characters allowed for submissions (for the messages parameter) which could allow for much more malicious attacks to change appearances or redirect the url.Futhermore, multiple vulnerabilities allow for invalid data as well as missing parameters of data. While some preventative measures for parameters of data have been implemented, they do not work in the desired fashion as of now. For websites that use this web application (like our assignment 2) to store data and retreive data, these vulnerabilities could put these other websites at risk for unwanted/invalid data. Lastly, no security measures have been implemented to prevent an overloading of submissions (or thousands of submissions in a short period of time) which could stall the heroku server.</p>
+
+<h2>Issues Found</h2>
+</body>
+</html>
+
