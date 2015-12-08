@@ -2,25 +2,70 @@
 <html>
 <head>
     <title>ScoreCenter Security Report</title>
+    <meta charset="utf-8">
+    <link href="style.css" rel="stylesheet"/>
 </head>
 <body>
-<h1>Security and Privacy Assessment of Client-Side and Server-Side</h1>
+    <h1>Security and Privacy Assessment of Client-Side and Server-Side</h1>
 
-<p>Inspected by Rachael Robinson on Dec. 7, 2015</p>
+    <p>Inspected by Rachael Robinson on Dec. 7, 2015</p>
 
-<h2>Introduction</h2>
+    <h2>Introduction</h2>
 
-<p>This assessment tests the security and privacy of the <a href="http://lit-brushlands-5923.herokuapp.com/">Assignment 3</a> web application developed by Cecily Lo for Comp20 assignment 2 and 3. According to her client, for Assignment 3, Cecily was instructed to "build a web application that maintains location check-ins (login, latitude, longitude, message) for a long period of time". Furthermore, she was her client does "mention a thing about security or error handling in the requirements. Authentication to this web application is not required" although a list of valid users is given and checked. Thus, this assesment looks into insecurities such as cross site scripting, invalid parameters, as well as invalid data entries (or data entries with missing fields</p>
+    <p>This assessment tests the security and privacy of the <a href="http://lit-brushlands-5923.herokuapp.com/">Assignment 3</a> web application developed by Cecily Lo for Comp20 assignment 2 and 3. According to her client, for Assignment 3, Cecily was instructed to "build a web application that maintains location check-ins (login, latitude, longitude, message) for a long period of time". Furthermore, she was her client does "mention a thing about security or error handling in the requirements. Authentication to this web application is not required" although a list of valid users is given and checked. Thus, this assesment looks into insecurities such as cross site scripting, invalid parameters, as well as invalid data entries (data entries with missing fields)</p>
 
-<h2>Methodology</h2>
+    <h2>Methodology</h2>
 
-<p>Initially, testing was conducted in a "black-box" fashion which is similar to how an attacker would attack the website. By simply using curl, I found multiple vulnuerabilities that I then verified by looking at the code. When looking through the code, I found a few more insecurities that would make this web application vulnerable to malicious attacks.</p>
+    <p>Initially, testing was conducted in a "black-box" fashion which is similar to how an attacker would attack the website. By simply using curl, I found multiple vulnuerabilities that I then verified by looking at the code. When looking through the code, I found a few more insecurities that would make this web application vulnerable to malicious attacks.</p>
 
-<h2>Abstract of Findings</h2>
+    <h2>Abstract of Findings</h2>
 
-<p>Never ever trust user input. The vulnerabilities of this application all could be fixed by having the developer chant this mantra to themselves as they write their code. By simply accepting external input without extensively checking it, the developer creates a web applicaiton that is extremely vulnerable to malicious attacks. The web application allows for cross site scripting where input is not handled correctly. Also, there is no limit on the characters allowed for submissions (for the messages parameter) which could allow for much more malicious attacks to change appearances or redirect the url.Futhermore, multiple vulnerabilities allow for invalid data as well as missing parameters of data. While some preventative measures for parameters of data have been implemented, they do not work in the desired fashion as of now. For websites that use this web application (like our assignment 2) to store data and retreive data, these vulnerabilities could put these other websites at risk for unwanted/invalid data. Lastly, no security measures have been implemented to prevent an overloading of submissions (or thousands of submissions in a short period of time) which could stall the heroku server.</p>
+    <p><strong>Never ever trust user input.</strong> The vulnerabilities of this application all could be fixed by having the developer chant this mantra to themselves as they write their code. By simply accepting external input without extensively checking it, the developer creates a web applicaiton that is extremely vulnerable to malicious attacks. The web application allows for cross site scripting where input is not handled correctly. Also, there is no limit on the characters allowed for submissions (for the messages parameter) which could allow for much more malicious attacks to change appearances or redirect the url.Futhermore, multiple vulnerabilities allow for invalid data as well as missing parameters of data. While some preventative measures for parameters of data have been implemented, they do not work in the desired fashion as of now. For websites that use this web application (like our assignment 2) to store data and retreive data, these vulnerabilities could put these other websites at risk for unwanted/invalid data. Lastly, no security measures have been implemented to prevent an overloading of submissions (or thousands of submissions in a short period of time) which could stall the heroku server.</p>
 
-<h2>Issues Found</h2>
+    <h2>Issues Found</h2>
+    <ol>
+        <li><p><strong>Cross-Cross-Site Scripting</strong></p>
+            <ul>
+                <li>Using curl (<code>curl --data "login=CindyLytle&lat=75&lng=60&message=< iframe src='http://tutorials.hostucan.net/wp-content/uploads/2015/04/hacked1.jpg'></iframe>" http://lit-brushlands-5923.herokuapp.com/sendLocation</code>), I was able to change the message part of the database to display an iframe of another page. When a user makes their way to <a href="http://lit-brushlands-5923.herokuapp.com/">Cecily's main page</a>, instead of strings as messages, I could insert iframes:<br>
+                    <img class="screenshots" src="images/iframe.png" alt="Invalid data values" />
+                </li>
+                
+                <li>Additionally, just by using curl(<code>curl --data "login=CindyLytle&lat=75&lng=60&message=< meta http-equiv='refresh' content='0; url=http://memegenerator.net/instance/34127737'/>" http://lit-brushlands-5923.herokuapp.com/sendLocation</code>), I was able to redirect <a href="http://lit-brushlands-5923.herokuapp.com/">Cecily's page</a> to another website.<br>
+                    <img class="screenshots" src="images/redirect.png" alt="Invalid data values" />
+                </li>
+                
+                <li>Severity: <span id="severity-high">HIGH</span> becuase this vulnerability makes the web application a security risk for other websites as well as for users because it could redirect users to other malicious websites.</li>
+                
+                <li>To Fix: This is an easy issue to resolve/prevent by checking user input or filtering it before inserting it into the database. For example, including <code>str.match(/[\d\w\s\]).join('');</code> allows numbers, words, and whitespaces. Also, using a <code>str.replace()</code> method could work but doing this requires a knowledge base of all malacious ways of cross-site-scripting to get rid of them. Additionally, when using IE9, use <a href="http://windows.microsoft.com/en-us/internet-explorer/products/ie-9/features/cross-site-scripting-filter">this</a> filter in addition to including the aforementioned code (seeing as there are still <a href="https://blog.whitehatsec.com/internet-explorer-xss-filter/">vulnerabilities</a>).</li>
+            </ul>
+        </li>
+        <li>
+            <p><strong>Allows Invalid Data Values</strong></p>
+            <ul>
+                <li>Once again, simply by using curl (<code>curl --data "login=CindyLytle&lat=-5000&lng=5000&message=hello'" http://lit-brushlands-5923.herokuapp.com/sendLocation</code>), I was able to insert data that had invalid values for the parameters required, which can be seen on the <a href="http://lit-brushlands-5923.herokuapp.com/">main page</a>.<br>
+                    <img class="screenshots" src="images/invalid_data.png" alt="Invalid data values" />
+                </li>
+                
+                <li>Severity: <span id="severity-high">HIGH</span> because by accepting invalid data entries, the website does not hold valid data and could cause greater problems for websites storing data through this web application. By not verifying the fields being inserted, the web applicaiton assumes they are valid, which as we see with mapchat, could lead to problems. Should a latitude and longitude by invalid numbers, they will cause problems for users on mapchat</li>
+                
+                <li>To Fix: This too is an easy vulnerability to avoid. Simply by adding an if statement that contains <code>lat <= 90 && lat >=-90 && lng <= 180 && lng >= -180</code>, those with invalid numbers for these parameters can be tossed (or throw an error) and not inserted into the database.</li>
+            </ul>
+    </li>
+    <li>
+        <p><strong>Missing Parameters</strong></p>
+        <ul>
+            <li>Similarly, I was able to insert entries with some missing parameters using curl (<code>curl --data "login=CindyLytle&message=<b>YAAAAS</b>" http://lit-brushlands-5923.herokuapp.com/sendLocation</code>). When this is rendered on the <a href="http://lit-brushlands-5923.herokuapp.com/">page</a>, lat and lng come up as NaN.<br>
+                <img class="screenshots" src="images/missing_data.png" alt="Missing data values" />
+            </li>
+            
+            <li>Severity: <span id="severity-high">HIGH</span> since other websites, such as mapchat, again use this web application to store data. When the response to mapchat contains NaN, it breaks mapchat. Thus, this vulnerability woudl deter users from using this web application and make it hard to gain/maintain users.</li>
+            
+            <li>It should be noted that when I went in to look at the code, Cecily did try to combat this vulnerability. While Cecily checks for <code>login==undefined || lat==undefined || lng==undefined || message==undefined</code>, she should instead check to see if these parameters are actually <code>null</code>. The defintion of of both null and undefined and the difference can be fond <a href="http://stackoverflow.com/questions/5076944/what-is-the-difference-between-null-and-undefined-in-javascript">here</a>.</li>
+        </ul>
+    </li>
+<h2>Conclusion</h2>
+
+<p></p>
 </body>
 </html>
 

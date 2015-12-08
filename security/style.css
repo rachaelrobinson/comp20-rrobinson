@@ -1,0 +1,12 @@
+#severity-high{
+	color: red;
+}
+
+.screenshots{
+	height: 50em;
+	padding: 1em;
+}
+
+code{
+	background-color: #e5e5e5;
+}
