@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ScoreCenter Security Report</title>
+    <title>Assignment 4</title>
     <meta charset="utf-8">
     <link href="style.css" rel="stylesheet"/>
 </head>
@@ -26,12 +26,12 @@
     <ol>
         <li><p><strong>Cross-Cross-Site Scripting</strong></p>
             <ul>
-                <li>Using curl (<code>curl --data "login=CindyLytle&lat=75&lng=60&message=< iframe src='http://tutorials.hostucan.net/wp-content/uploads/2015/04/hacked1.jpg'></iframe>" http://lit-brushlands-5923.herokuapp.com/sendLocation</code>), I was able to change the message part of the database to display an iframe of another page. When a user makes their way to <a href="http://lit-brushlands-5923.herokuapp.com/">Cecily's main page</a>, instead of strings as messages, I could insert iframes:<br>
-                    <img class="screenshots" src="images/iframe.png" alt="Invalid data values" />
+                <li>Using curl (<code>curl --data "login=CindyLytle&lat=75&lng=60&message=&lt;iframe src='http://tutorials.hostucan.net/wp-content/uploads/2015/04/hacked1.jpg'&gt;&lt;/iframe&gt;" http://lit-brushlands-5923.herokuapp.com/sendLocation</code>), I was able to change the message part of the database to display an iframe of another page. When a user makes their way to <a href="http://lit-brushlands-5923.herokuapp.com/">Cecily's main page</a>, instead of strings as messages, I could insert iframes:<br>
+                    <img class="screenshots" src="images/iframe.png" alt="Iframe injection" />
                 </li>
                 
-                <li>Additionally, just by using curl(<code>curl --data "login=CindyLytle&lat=75&lng=60&message=< meta http-equiv='refresh' content='0; url=http://memegenerator.net/instance/34127737'/>" http://lit-brushlands-5923.herokuapp.com/sendLocation</code>), I was able to redirect <a href="http://lit-brushlands-5923.herokuapp.com/">Cecily's page</a> to another website.<br>
-                    <img class="screenshots" src="images/redirect.png" alt="Invalid data values" />
+                <li>Additionally, just by using curl(<code>curl --data "login=CindyLytle&lat=75&lng=60&message=&lt;meta http-equiv='refresh' content='0; url=http://memegenerator.net/instance/34127737'/&gt;" http://lit-brushlands-5923.herokuapp.com/sendLocation</code>), I was able to redirect <a href="http://lit-brushlands-5923.herokuapp.com/">Cecily's page</a> to another website.<br>
+                    <img class="screenshots" src="images/redirect.png" alt="Redirect website" />
                 </li>
                 
                 <li>Severity: <span id="severity-high">HIGH</span> becuase this vulnerability makes the web application a security risk for other websites as well as for users because it could redirect users to other malicious websites.</li>
@@ -64,8 +64,7 @@
         </ul>
     </li>
 <h2>Conclusion</h2>
-
-<p></p>
+<p>Beyond these simple fixes for severe security threats and vulnerabilities, another vulnerability to consider is lack of prevention of DDoS. As described <a href="http://www.digitalattackmap.com/understanding-ddos/">here</a>, "a Distributed Denial of Service (DDoS) attack is an attempt to make an online service unavailable by overwhelming it with traffic from multiple sources". This is a serious problem, as seen <a href="http://www.computerworld.com/article/2862652/garden-variety-ddos-attack-knocks-north-korea-off-the-internet.html"> here</a>, that is not addressed (nor was it asked for by the client). Granted, Heroko's infrastructure <a href="https://www.heroku.com/policy/security">provides DDoS mitigation techniques</a> but, if Heroku believes it is getting attacked, this could affect other users who use this web application. Encoding preventative measures against DDoS can be done multiple ways or by using different services. Also, it should be noted that the page does not sort porperly based on timestamp.</p>
 </body>
 </html>
 
