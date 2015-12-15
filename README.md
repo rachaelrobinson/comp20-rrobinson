@@ -1,6 +1,6 @@
 
-The Purpose of this Git Repository:
-	To serve as a portfolio of my work throughout this class.
+The Purpose of this Git Repository:<br />
+	To serve as a portfolio of my work throughout this class.<br />
 Favorite lab or assignment:
 	My favorite assignments were mapchat and the security assignment. I really enjoyed mapchat because that was the first time I really started to get the hang of things and learned to follow javascript functions. I also really enjoyed the security assignment because I'd never been aware of how vulnerable many sites are and the security flaws in even big company websites. It really made me begin to think about different ways that websites can be attacked. 
 How far I have grown:
